@@ -1,0 +1,13 @@
+ <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Contact Us</title>
+    </head>
+    <body>
+        <form method="post">
+            {% csrf_token %}  {# Important for security #}
+            {{ form.as_p }}   {# Renders form fields as paragraphs #}
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+    </html>
