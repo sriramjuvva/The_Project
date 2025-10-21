@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Blogs_app',
-    'rest_framework'
+    'rest_framework',
+    'captcha',  
 ]
 
 MIDDLEWARE = [
@@ -52,11 +53,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Blogs_project.urls'
-
+import os 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,13 +78,15 @@ WSGI_APPLICATION = 'Blogs_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blogs',
+        'NAME': 'blogs_project',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
+
+AUTH_USER_MODEL = 'Blogs_app.CustomUser'
 
 
 # Password validation
@@ -133,3 +136,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+NOCAPTCHA = True
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/Users/login/'

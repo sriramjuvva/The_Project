@@ -1,24 +1,25 @@
 from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect,Http404,JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .models import User
+from django.http import HttpResponse,JsonResponse
+from django.views.generic.edit import CreateView
+from .forms import RegistrationForm,LoginForm
+from django.urls import reverse_lazy
+from django.contrib.auth import views as auth_views
 
 
-@csrf_exempt
-def new_user_form(request):
-    if request.method == 'POST':
-        email = request.POST.get("email")
-        username = request.POST.get("username")
-        password = request.POST.get("password")
 
-        if not email or not username or not password:
-            return JsonResponse({"success": False, "message": "All three fields are required."}, status=400)
 
-        if User.objects.filter(username=username).exists():
-            return JsonResponse({"success": False, "message": "Username already exists."}, status=200)
 
-        User.objects.create(username=username, password=password)
-        return JsonResponse({"success": True, "message": f"User '{username}' created successfully."}, status=201)
+class SignUp_View(CreateView):
+    template_name = "register.html"
+    form_class  = RegistrationForm
+    success_url  = reverse_lazy('Login')
 
-    return JsonResponse({"success": False, "message": "Only POST method allowed."}, status=405)
+
+class NewLoginPageView(auth_views.LoginView):
+    template_name = 'login.html'
+    form_class = LoginForm
+
+
+def home_page_view(request):
+    return render(request,'base.html')
 
