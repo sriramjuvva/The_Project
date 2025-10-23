@@ -10,43 +10,80 @@
             margin: 0;
             padding: 0;
             background: linear-gradient(-1.8turn, rgb(38, 35, 52), rgb(126, 122, 149));
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            min-height: 100vh;
             font-family: "Poppins", sans-serif;
         }
 
-        h1 {
+        .navbar {
+            width: 100%;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
             color: #ff0000;
             font-weight: bold;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2rem;
+            margin: 0;
         }
 
-        p {
-            color: white;
-            font-size: 1.1rem;
-            margin-bottom: 40px;
+        .nav-buttons a {
+            margin-left: 15px;
+            text-decoration: none;
         }
 
-        .btn-custom {
-            position: relative;
+        .btn-nav {
+            background-color: #ff0000;
             color: white;
-            background: rgb(43, 43, 43);
-            border: none;
-            padding: 12px 35px;
-            font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 15px;
-            overflow: hidden;
-            z-index: 1;
-            transition: transform 0.3s ease;
-            margin: 10px;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: 0.3s;
         }
 
-        .btn-custom::before {
+        .btn-nav:hover {
+            background-color: #cc0000;
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .content p {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+        }
+
+        .courses-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .course-card {
+            position: relative;
+            width: 230px;
+            height: 130px;
+            border-radius: 20px;
+            background: rgb(43, 43, 43);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .course-card::before {
             content: "";
             position: absolute;
             width: 300%;
@@ -58,49 +95,61 @@
             z-index: 0;
         }
 
-        .btn-custom::after {
+        .course-card::after {
             content: "";
             position: absolute;
-            inset: 3px;
+            inset: 4px;
             background: rgb(43, 43, 43);
-            border-radius: 12px;
+            border-radius: 18px;
             z-index: 1;
         }
 
-        .btn-custom span {
+        .course-card span {
             position: relative;
             z-index: 2;
         }
 
-        .btn-custom:hover {
-            transform: translateY(-3px);
+        .course-card:hover {
+            transform: translateY(-5px);
         }
 
         @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
     </style>
-    
 </head>
 
 <body>
-    <h1>LearnBytes</h1>
-    <p>Learn smart. Learn fast. Learn everything.</p>
-
-    <div>
-        <a href="{% url 'Login' %}">
-            <button class="btn-custom"><span>Login</span></button>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>LearnBytes</h1>
+        <div class="nav-buttons">
+            <a href="{% url 'Login' %}"><button class="btn-nav">Login</button></a>
+            <a href="{% url 'Signup' %}"><button class="btn-nav">Sign Up</button></a>
+            <a href="https://pythonfunzone.blogspot.com/">
+            <button class="btn-nav">Visit The Blogs!</button>
         </a>
-        <a href="{% url 'Signup' %}">
-            <button class="btn-custom"><span>Sign Up</span></button>
-        </a>
-        <div>
-         <a href="https://pythonfunzone.blogspot.com/">
-             <button class="btn-custom"><span>Visit The Blogs!</span></button>
-            </a>
         </div>
     </div>
 
+    <!-- Hero Section -->
+    <div class="content">
+        <p>Learn smart. Learn fast. Learn everything.</p>
+        
+    </div>
+
+    <!-- Courses Section -->
+    <div class="courses-container">
+        {% for course in courses %}
+            <div class="course-card">
+                <span>{{ course.Course_name }}</span>
+            </div>
+        {% empty %}
+            <p style="color:white;">No courses available.</p>
+        {% endfor %}
+    </div>
+
 </body>
-</html> 
+</html>
