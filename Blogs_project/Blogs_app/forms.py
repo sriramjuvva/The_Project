@@ -54,7 +54,7 @@ class LoginForm(AuthenticationForm):
             try:
                 user = CustomUser.objects.get(username=username)
             except CustomUser.DoesNotExist:
-                raise ValidationError("username not found. Please enter a valid email.")
+                raise ValidationError("username not found. Please enter a valid Username.")
 
             # Authenticate the user
             user = authenticate(self.request, username=username, password=password)

@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-a)m!d#w^3d%5b&wjp$pfjbc^o#sm7uhgw+e*9g^v^@bfuc95t-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -40,6 +42,8 @@ INSTALLED_APPS = [
     'Blogs_app',
     'rest_framework',
     'captcha',  
+    'courseapp',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,8 @@
+from django.urls import path,include
+from .views import * 
+from . import views
+
+urlpatterns = [
+    path('courses/',views.Courses_to_show,name = "courses")
+]
+
