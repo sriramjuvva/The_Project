@@ -13,8 +13,9 @@ class Courses_Model(models.Model):
 
 class Lesson(models.Model):
     course = models.ForeignKey(Courses_Model, on_delete=models.CASCADE, related_name="lessons")
-    day_number = models.PositiveIntegerField(unique= True)
+    day_number = models.PositiveIntegerField()
     title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='product_images/',blank=True, null=True)
     content = RichTextField()
 
     
