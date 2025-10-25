@@ -4,9 +4,11 @@ from .models import *
 from . import serializers 
 from . serializers import *
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Lower
 
 
 
@@ -22,17 +24,23 @@ def Courses_to_show(request):
 
 
 @api_view(['GET'])
-def fetching_the_content(request,course_name):
-    getting_id_from_courses_model = Courses_Model.objects.get(Course_name = course_name)
-    id_of_course = getting_id_from_courses_model.id
-    showing_titles_of_days = Lesson.objects.get(course=id_of_course)
-    return HttpResponse(str(showing_titles_of_days.day_number)+"-"+showing_titles_of_days.title)
+def fetching_the_days(request,course_name):
+    course = (
+        Courses_Model.objects.annotate(lower_name=Lower('Course_name')).filter(lower_name=course_name.lower()).first())
+    if not course:
+        return HttpResponse("Oops! There is no course with that name.")
+    lesson = Lesson.objects.filter(course=course).first()
+    if not lesson:
+        return HttpResponse("No lessons found for this course.")
+    return HttpResponse(f"{lesson.day_number} - {lesson.title}")
 
-@login_required(login_url='')
+
+@login_required(login_url='/Users/login/')
 def fetching_the_content(request, course_name, day_number):
-    getting_id_from_courses_model = Courses_Model.objects.get(Course_name=course_name)
-    id_of_course = getting_id_from_courses_model.id
-    showing_titles_of_days = Lesson.objects.get(course=id_of_course, day_number=day_number)
-    content = showing_titles_of_days.content
-    return HttpResponse(content)
-        
+    course = Courses_Model.objects.annotate(lower_name=Lower('Course_name')).filter(lower_name=course_name.lower()).first()
+    if not course:
+        return JsonResponse({"Success": False, "Message": "No Courses Found"})
+    lesson = Lesson.objects.filter(course=course, day_number=day_number).first()
+    if not lesson:
+        return HttpResponse("The Course is not updated for that date")
+    return HttpResponse(lesson.content or "Coming Soon")
