@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 
 
 class RegistrationForm(UserCreationForm):
-    username = forms.CharField(max_length=50, required=False,label="Username")
+    username = forms.CharField( widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     first_name =forms.CharField(max_length=50, required=False,label = "first_name")
     last_name = forms.CharField(max_length=50, required=False,label = "last_name")
     email = forms.CharField(max_length=50, required=True,label = "Email")
@@ -16,6 +16,7 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'email']
+        
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -33,6 +34,7 @@ class RegistrationForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
     captcha = ReCaptchaField()
+    username = forms.CharField( widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     class Meta:
         fields = ['username', 'password', 'captcha']
 
