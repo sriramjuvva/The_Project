@@ -152,6 +152,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 NOCAPTCHA = True
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
-
-LOGIN_REDIRECT_URL = '/home/'
+LOGIN_URL = '/Users/login/'  # used by @login_required
+LOGIN_REDIRECT_URL = '/courses/courses/'
 LOGOUT_REDIRECT_URL = '/Users/login/'
