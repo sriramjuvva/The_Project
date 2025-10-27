@@ -25,22 +25,29 @@ def Courses_to_show(request):
 
 @api_view(['GET'])
 def fetching_the_days(request,course_name):
-    course = (
-        Courses_Model.objects.annotate(lower_name=Lower('Course_name')).filter(lower_name=course_name.lower()).first())
+    course = Courses_Model.objects.annotate(lower_name=Lower('Course_name')).filter(lower_name=course_name.lower()).first()
     if not course:
         return HttpResponse("Oops! There is no course with that name.")
-    lesson = Lesson.objects.filter(course=course).first()
-    if not lesson:
-        return HttpResponse("No lessons found for this course.")
-    return HttpResponse(f"{lesson.day_number} - {lesson.title}")
+    
+    lessons = Lesson.objects.filter(course=course).order_by('day_number')
+    
+    return render(request, "days.html", {
+        "course_name": course.Course_name,
+        "lessons": lessons
+    })
 
-
-@login_required(login_url='/Users/login/')
+@login_required(login_url='/login/')
 def fetching_the_content(request, course_name, day_number):
     course = Courses_Model.objects.annotate(lower_name=Lower('Course_name')).filter(lower_name=course_name.lower()).first()
     if not course:
-        return JsonResponse({"Success": False, "Message": "No Courses Found"})
+        return render(request, "error_page.html", {"message": "No Courses Found"})
+
     lesson = Lesson.objects.filter(course=course, day_number=day_number).first()
     if not lesson:
-        return HttpResponse("The Course is not updated for that date")
-    return HttpResponse(lesson.content or "Coming Soon")
+        return render(request, "error_page.html", {"message": "The Course is not updated for that date"})
+
+    return render(request, "lesson_content.html", {
+        "course_name": course_name,
+        "lesson": lesson,
+        "content": mark_safe(lesson.content or "Coming Soon"),
+    })
