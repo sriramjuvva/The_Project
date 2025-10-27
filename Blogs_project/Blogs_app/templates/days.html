@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LearnBytes</title>
+    <title>{{ course_name }} - LearnBytes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
         body {
             margin: 0;
@@ -51,15 +50,10 @@
         .content {
             text-align: center;
             margin-top: 50px;
-        }
-
-        .content p {
             color: white;
-            font-size: 1.1rem;
-            margin-bottom: 50px;
         }
 
-        .courses-container {
+        .days-container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -67,10 +61,10 @@
             padding: 20px;
         }
 
-        .course-card {
+        .day-card {
             position: relative;
-            width: 230px;
-            height: 130px;
+            width: 260px;
+            height: 140px;
             border-radius: 20px;
             background: rgb(43, 43, 43);
             color: white;
@@ -78,12 +72,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             overflow: hidden;
             transition: transform 0.3s ease;
+            text-align: center;
         }
 
-        .course-card::before {
+        .day-card::before {
             content: "";
             position: absolute;
             width: 300%;
@@ -95,7 +90,7 @@
             z-index: 0;
         }
 
-        .course-card::after {
+        .day-card::after {
             content: "";
             position: absolute;
             inset: 4px;
@@ -104,12 +99,13 @@
             z-index: 1;
         }
 
-        .course-card span {
+        .day-card span {
             position: relative;
             z-index: 2;
+            padding: 10px;
         }
 
-        .course-card:hover {
+        .day-card:hover {
             transform: translateY(-5px);
         }
 
@@ -126,42 +122,30 @@
     <div class="navbar">
         <h1>LearnBytes</h1>
         <div class="nav-buttons">
-            <a href="{% url 'Login' %}"><button class="btn-nav">Login</button></a>
-            <a href="{% url 'Signup' %}"><button class="btn-nav">Sign Up</button></a>
+            {% comment %} <a href="{% url 'Login' %}"><button class="btn-nav">Login</button></a>
+            <a href="{% url 'Signup' %}"><button class="btn-nav">Sign Up</button></a> {% endcomment %}
             <a href="https://pythonfunzone.blogspot.com/">
-            <button class="btn-nav">Visit The Blogs!</button>
-        </a>
+                <button class="btn-nav">Visit The Blogs!</button>
+            </a>
         </div>
     </div>
 
-    <!-- Hero Section -->
     <div class="content">
-        <p>Learn smart. Learn fast. Learn everything.</p>
-        
+        <h2>{{ course_name }} Course Days</h2>
+        <p>Explore the lessons below</p>
     </div>
 
-    <!-- Courses Section -->
-    {% comment %} <div class="courses-container">
-        {% for course in courses %}
-            <div class="course-card">
-                <span>{{ course.Course_name }}</span>
-            </div>
+    <div class="days-container">
+        {% for lesson in lessons %}
+            <a href="{% url 'fetching_the_content' course_name lesson.day_number %}" style="text-decoration: none;">
+                <div class="day-card">
+                    <span>Day {{ lesson.day_number }}: {{ lesson.title }}</span>
+                </div>
+            </a>
         {% empty %}
-            <p style="color:white;">No courses available.</p>
+            <p style="color:white;">No lessons found for this course.</p>
         {% endfor %}
-    </div> {% endcomment %}
-    <div class="courses-container">
-    {% for course in courses %}
-        <a href="{% url 'fetching_the_days' course.Course_name %}" style="text-decoration:none;">
-            <div class="course-card">
-                <span>{{ course.Course_name }}</span>
-            </div>
-        </a>
-    {% empty %}
-        <p style="color:white;">No courses available.</p>
-    {% endfor %}
-</div>
-
+    </div>
 
 </body>
 </html>

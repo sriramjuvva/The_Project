@@ -35,6 +35,7 @@ class RegistrationForm(UserCreationForm):
 class LoginForm(AuthenticationForm):
     captcha = ReCaptchaField()
     username = forms.CharField( widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    password = forms.CharField( widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     class Meta:
         fields = ['username', 'password', 'captcha']
 

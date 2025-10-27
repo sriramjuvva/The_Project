@@ -18,7 +18,7 @@ class SignUp_View(CreateView):
 class NewLoginPageView(auth_views.LoginView):
     template_name = 'login.html'
     form_class = LoginForm
-
+    
 
 def home_page_view(request):
     return render(request,'base.html')
